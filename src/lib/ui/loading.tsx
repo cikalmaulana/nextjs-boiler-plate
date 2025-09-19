@@ -1,7 +1,7 @@
 "use client"
 
 export interface I_LoadingProps {
-    color?: "primary" | "secondary"
+    color: "primary" | "secondary" | "white"
     label?: string
     className?: string
     height?: string
