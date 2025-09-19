@@ -63,8 +63,8 @@ export default function CE_Toast({ name }: I_ToastProps) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className={`flex flex-row gap-1 w-full min-w-[50%] max-w-xl px-4 py-2 rounded-3xl shadow-lg border-2 bg-white font-semibold ${
-                            t.success ? "border-success text-success" : "border-danger text-danger"
+                        className={`flex flex-row gap-1 w-full min-w-[50%] max-w-xl px-4 py-2 rounded-3xl shadow-lg font-semibold ${
+                            t.success ? "text-white bg-success" : "text-white bg-danger"
                         }`}
                     >
                         {t.success 

@@ -10,7 +10,8 @@
   --success: #3A6F43;
   --warning: #FFC107;
   --danger: #660B05;
-  --disable: #61677A;
+  --disable: #a2a7b8;
+  --disableText: #44464d;
   --muted: #A0A0A0;
 
   /* Fonts */
@@ -28,6 +29,7 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-disable: var(--disable);
+  --color-disable-text: var(--disableText);
   --color-muted: var(--muted);
 
   --font-sans: var(--font-sans);

@@ -1,10 +1,13 @@
 "use client"
 
 import emitter from "@/lib/function/global.emitter";
+import CE_Autocomplete from "@/lib/ui/autocomplete";
 import CE_Button from "@/lib/ui/button"
 import CE_Card from "@/lib/ui/card";
 import CE_Checkbox from "@/lib/ui/checkbox";
 import CE_Dropdown from "@/lib/ui/dropdown";
+import CE_Input from "@/lib/ui/input";
+import CE_DatePicker from "@/lib/ui/input.date";
 import CE_Loading from "@/lib/ui/loading";
 import CE_ModalConfirmation from "@/lib/ui/modal.confirmation";
 import CE_ModalInfo from "@/lib/ui/modal.info";
@@ -14,6 +17,22 @@ import { useState } from "react";
 export default function CE_HomeMain(){
     const [isModalOpen, setModalOpen] = useState(false)
     const [isModalConfirmOpen, setModalConfirmOpen] = useState(false)
+    const [name, setName] = useState("")
+    const [phone, setPhone] = useState("")
+    const [birthdate, setBirthdate] = useState<Date | null>(null)
+    const [selectedGender, setSelectedGender] = useState("")
+    const [singleCountry, setSingleCountry] = useState<string>("")
+    const [multiCountries, setMultiCountries] = useState<string[]>([])
+
+    const countryOptions = [
+        { label: "Indonesia", value: "id" },
+        { label: "Malaysia", value: "my" },
+        { label: "Singapore", value: "sg" },
+        { label: "Thailand", value: "th" },
+        { label: "Vietnam", value: "vn" },
+        { label: "Philippines", value: "ph" },
+        { label: "Japan", value: "jp" },
+    ]
 
     const doOpenToast = (type: boolean) => {
         emitter.emit("toast", {
@@ -90,14 +109,73 @@ export default function CE_HomeMain(){
                 <div className="flex flex-col gap-2 mt-4 border-b-2 w-1/2 pb-4 items-center">
                     Dropdown
                     <CE_Dropdown
+                        label="Date of Birth"
                         options={[
                             { label: "Male", value: "male" },
                             { label: "Female", value: "female" },
                             { label: "Other", value: "other" },
                         ]}
+                        value={selectedGender}
                         placeholder="Select gender"
-                        onChange={(val) => console.log("Selected:", val)}
+                        onChange={(val) => setSelectedGender(val)}
                         className="w-1/2"
+                    />
+
+                    <CE_Autocomplete
+                        label="Select Country (Single)"
+                        options={countryOptions}
+                        value={singleCountry}
+                        onChange={(val) => setSingleCountry(val as string)}
+                        className="w-64"
+                    />
+
+                    <CE_Autocomplete
+                        label="Select Countries (Multiple)"
+                        options={countryOptions}
+                        value={multiCountries}
+                        multiple
+                        onChange={(val) => setMultiCountries(val as string[])}
+                        className="w-96"
+                    />
+                </div>
+                <div className="flex flex-col gap-2 mt-4 border-b-2 w-1/2 pb-4 items-center">
+                    Input
+                    <CE_Input
+                        label="Name"
+                        type="text"
+                        value={name}
+                        placeholder="Enter your name"
+                        onInput={(val) => setName(val)}
+                        onEnter={() => {
+                                emitter.emit("toast", {
+                                success: true,
+                                label: "On Enter Input Name: " + name,
+                                autoclose: true,
+                                autoclosetime: 5,
+                            })}
+                        }
+                    />
+                    <CE_Input
+                        label="Phone Number"
+                        type="number"
+                        value={phone}
+                        placeholder="Enter your name"
+                        onInput={(val) => setPhone(val)}
+                        onEnter={() => {
+                            emitter.emit("toast", {
+                                success: true,
+                                label: "On Enter Phone Number: " + phone,
+                                autoclose: true,
+                                autoclosetime: 5,
+                            })}
+                        }
+                    />
+                    <CE_DatePicker 
+                        label={"Date of Birth"} 
+                        value={birthdate} 
+                        onChange={(date) => {
+                            setBirthdate(date)
+                        }}                    
                     />
                 </div>
                 <div className="flex flex-col gap-2 mt-4 border-b-2 w-1/2 pb-4 items-center">

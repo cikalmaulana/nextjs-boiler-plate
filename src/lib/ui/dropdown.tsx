@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface I_DropdownOption {
     label: string
@@ -9,7 +9,10 @@ interface I_DropdownOption {
 }
 
 interface I_DropdownProps {
+    label: string
     options: I_DropdownOption[]
+    value: string
+    disable?: boolean
     placeholder?: string
     className?: string
     onChange?: (value: string) => void
@@ -17,33 +20,71 @@ interface I_DropdownProps {
 
 export default function CE_Dropdown({
     options,
+    label,
+    value,
+    disable,
     placeholder = "Select an option",
     className,
     onChange,
 }: I_DropdownProps) {
     const [open, setOpen] = useState(false)
-    const [selected, setSelected] = useState<I_DropdownOption | null>(null)
+    const wrapperRef = useRef<HTMLDivElement>(null)
+    const selected = options.find((opt) => opt.value === value) || null
 
     const handleSelect = (option: I_DropdownOption) => {
-        setSelected(option)
         setOpen(false)
         onChange?.(option.value)
     }
 
+    // ✅ Close kalau klik di luar
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+                setOpen(false)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+        }
+    }, [])
+
     return (
-        <div className={`relative ${className ?? ""}`}>
+        <div ref={wrapperRef} className={`relative ${className ?? ""}`}>
+            <label className="text-sm font-medium text-gray-700">{label}</label>
             <button
                 type="button"
-                onClick={() => setOpen(!open)}
-                className="w-full flex justify-between items-center hover:cursor-pointer border border-gray-300 rounded-lg px-4 py-2 bg-white shadow-sm hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                disabled={disable}
+                onClick={() => !disable && setOpen(!open)}
+                className={`
+                    w-full flex justify-between items-center rounded-lg px-4 py-2 
+                    shadow-sm focus:outline-none focus:ring-2 focus:ring-primary 
+                    ${disable 
+                        ? "bg-disable cursor-not-allowed" 
+                        : "bg-white border border-gray-300 hover:border-primary cursor-pointer"}
+                `}
             >
-                <span className={selected ? "text-gray-900" : "text-gray-400"}>
+                <span
+                    className={
+                        selected
+                            ? "text-sm text-gray-900"
+                            : disable
+                                ? "text-sm text-disable-text"
+                                : "text-sm text-gray-400"
+                    }
+                >
                     {selected ? selected.label : placeholder}
                 </span>
-                <Image src={"/icons/arrow-down.png"} width={16} height={16} alt="arrow"/>
+                <Image
+                    src={"/icons/arrow-down.png"}
+                    width={16}
+                    height={16}
+                    alt="arrow"
+                    className={`transition-transform ${open ? "rotate-180" : ""}`}
+                />
             </button>
 
-            {open && (
+            {open && !disable && (
                 <ul className="absolute mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto z-50">
                     {options.map((opt) => (
                         <li
