@@ -10,11 +10,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#1E40AF",
-        secondary: "#64748B",
+        "neon-dark": "#090040",
+        "neon-light": "#471396",
+        disable: "#61677A"
       },
     },
   },
   plugins: [],
 };
+
 export default config;
