@@ -1,6 +1,6 @@
 "use client"
 
-import emitter from "@/lib/function/global.emitter";
+import emitter from "@/lib/utils/global.emitter";
 import CE_Autocomplete from "@/lib/ui/autocomplete";
 import CE_Button from "@/lib/ui/button"
 import CE_Card from "@/lib/ui/card";

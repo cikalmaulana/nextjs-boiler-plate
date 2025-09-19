@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import emitter from "../function/global.emitter"
+import emitter from "../utils/global.emitter"
 import Image from "next/image"
 
 interface ToastPayload {
